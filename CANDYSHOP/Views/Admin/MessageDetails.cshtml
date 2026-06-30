@@ -1,0 +1,96 @@
+@model CANDYSHOP.Models.ContactMessage
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Message Details";
+}
+
+<div class="page-head">
+  <div class="crumbs">
+    <i class="fa-solid fa-house" style="color:var(--pink)"></i>
+    <span>Home</span>
+    <span class="sep">/</span>
+    <a href="@Url.Action("Messages", "Admin")" style="color:var(--muted)">Messages</a>
+    <span class="sep">/</span>
+    <span class="here">Details #@Model.Id</span>
+  </div>
+  <a href="@Url.Action("Messages", "Admin")" class="btn-ghost">
+    <i class="fa-solid fa-arrow-left"></i> Back to list
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-head">
+     <i class="fa-solid fa-envelope-open"></i> Message from @Model.Name
+  </div>
+  <div class="card-body" style="padding: 30px;">
+     <div style="display: grid; grid-template-columns: 120px 1fr; gap: 15px; margin-bottom: 20px; font-size: 14px;">
+        <div style="font-weight: 600; color: var(--muted);">Received:</div>
+        <div>@Model.CreatedAt.ToLocalTime().ToString("dd MMMM yyyy 'at' hh:mm tt")</div>
+
+        <div style="font-weight: 600; color: var(--muted);">From Name:</div>
+        <div><strong>@Model.Name</strong></div>
+
+        <div style="font-weight: 600; color: var(--muted);">Email:</div>
+        <div><a href="mailto:@Model.Email" style="color: var(--teal); text-decoration: underline;">@Model.Email</a></div>
+
+        <div style="font-weight: 600; color: var(--muted);">Subject:</div>
+        <div><strong>@Model.Subject</strong></div>
+     </div>
+
+     <div style="background-color: var(--cream-2); border: 1px solid var(--line); border-radius: 8px; padding: 20px; font-size: 15px; line-height: 1.6; min-height: 150px; white-space: pre-line;">
+        @Model.Message
+     </div>
+
+     <div style="margin-top: 25px; display: flex; gap: 10px;">
+        <button id="deleteBtn" class="btn-ghost" style="color: var(--pink); border-color: var(--pink); background: transparent;" data-id="@Model.Id" data-name="Message from @Model.Name">
+            <i class="fa-solid fa-trash"></i> Delete Message
+        </button>
+     </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  document.getElementById("deleteBtn").addEventListener("click", function() {
+      const id = this.dataset.id;
+      const name = this.dataset.name;
+      
+      Swal.fire({
+          title: `Delete this message?`,
+          text: "This action cannot be undone.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#D0324B",
+          cancelButtonColor: "#3d2230",
+          confirmButtonText: "Yes, delete it!",
+          background: "#FDF5E7"
+      }).then(res => {
+          if (res.isConfirmed) {
+              fetch(`@Url.Action("DeleteMessage", "Admin")/${id}`, {
+                  method: "POST"
+              })
+              .then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      Swal.fire({
+                          title: "Deleted!",
+                          icon: "success",
+                          background: "#FDF5E7",
+                          confirmButtonColor: "#2dbba4"
+                      }).then(() => {
+                          window.location.href = "@Url.Action("Messages", "Admin")";
+                      });
+                  } else {
+                      Swal.fire({
+                          title: "Error!",
+                          text: data.message || "Failed to delete message.",
+                          icon: "error",
+                          background: "#FDF5E7"
+                      });
+                  }
+              });
+          }
+      });
+  });
+</script>
+}

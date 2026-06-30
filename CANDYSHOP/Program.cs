@@ -1,7 +1,12 @@
+using CANDYSHOP.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.
+UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 var app = builder.Build();
 
@@ -19,6 +24,11 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "sendmail",
+    pattern: "php/sendmail.php",
+    defaults: new { controller = "Contact", action = "SubmitMessage" });
 
 app.MapControllerRoute(
     name: "default",

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Products — Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <!-- SweetAlert2 for delete confirmations -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="admin-shell" id="adminShell">
+
+  <!-- ========== TOPBAR ========== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-cake-candles"></i></span>
+      <span class="brand-text">PIECE<span class="accent">OFCAKE</span></span>
+    </div>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-right">
+      <div class="user-menu" id="userMenu">
+        <button class="icon-btn" id="userBtn" aria-label="User menu">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <div class="user-dropdown">
+          <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+      </div>
+      <a class="icon-btn" href="../index.html" target="_blank" rel="noopener" title="Open public site">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-divider">Main</div>
+    <a class="nav-item" href="#"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <a class="nav-item active" href="index.html"><i class="fa-solid fa-table-list"></i><span>Products</span></a>
+
+    <div class="sidebar-divider">Management</div>
+    <a class="nav-item" href="#"><i class="fa-solid fa-mug-saucer"></i><span>Menu</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-calendar-day"></i><span>Orders</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-envelope"></i><span>Messages</span><span class="nav-badge">3</span></a>
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+    <!-- Page head: title left, add new right -->
+    <div class="page-head">
+      <div class="crumbs">
+        <i class="fa-solid fa-house" style="color:var(--pink)"></i>
+        <span>Home</span>
+        <span class="sep">/</span>
+        <span class="here">Products</span>
+      </div>
+      <a href="create.html" class="btn-add">
+        <i class="fa-solid fa-plus"></i> Add New
+      </a>
+    </div>
+
+    <!-- Card with table -->
+    <div class="card">
+      <div class="card-head">
+        <i class="fa-solid fa-table-list"></i> All Products
+      </div>
+      <div class="card-body">
+
+        <!-- Tools row: length + search -->
+        <div class="table-tools">
+          <div class="len">
+            <label>
+              Show
+              <select id="pageLen">
+                <option>5</option><option selected>10</option>
+                <option>15</option><option>20</option>
+              </select>
+              entries
+            </label>
+          </div>
+          <div class="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <label>
+              <input type="search" id="searchInput" placeholder="Search products…">
+            </label>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <table class="data" id="dataTable">
+            <thead>
+              <tr>
+                <th data-key="id" data-type="num">#<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th data-key="name">Name<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th data-key="category">Category<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th data-key="price" data-type="num">Price<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th data-key="stock" data-type="num">Stock<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th data-key="status">Status<span class="sort"><i class="fa-solid fa-caret-up up"></i><i class="fa-solid fa-caret-down down"></i></span></th>
+                <th style="text-align:right;cursor:default">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"><!-- rows injected by JS --></tbody>
+          </table>
+        </div>
+
+        <!-- Foot: info + pager -->
+        <div class="table-foot">
+          <div id="info">Showing 0 of 0 results</div>
+          <div class="pager" id="pager"></div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="left"><span id="year"></span> &copy;
+      <a href="https://github.com/zaruyashar" target="_blank" rel="noopener">zaruyashar</a>
+    </div>
+    <div class="right">Project #2 of SoftITo Backend Development Program</div>
+  </footer>
+</div>
+
+<script>
+  /* ============ Demo data (replace with server-rendered rows) ============ */
+  const DATA = [
+    {id:1, name:"Strawberry Shortcake", category:"Cake",   price:24.50, stock:12, status:"Active"},
+    {id:2, name:"Chocolate Lava",       category:"Dessert",price:9.00,  stock:48, status:"Active"},
+    {id:3, name:"Vanilla Macarons",     category:"Cookie", price:14.75, stock:0,  status:"Out"},
+    {id:4, name:"Tiramisu Slice",       category:"Cake",   price:7.50,  stock:22, status:"Active"},
+    {id:5, name:"Cream Puff",           category:"Pastry", price:3.20,  stock:67, status:"Active"},
+    {id:6, name:"Lemon Tart",           category:"Tart",   price:6.80,  stock:18, status:"Active"},
+    {id:7, name:"Red Velvet Cupcake",   category:"Cupcake",price:4.50,  stock:30, status:"Active"},
+    {id:8, name:"Pistachio Baklava",    category:"Pastry", price:11.40, stock:5,  status:"Low"},
+    {id:9, name:"Cheesecake NY",        category:"Cake",   price:8.90,  stock:14, status:"Active"},
+    {id:10,name:"Matcha Roll",          category:"Cake",   price:18.00, stock:0,  status:"Out"},
+    {id:11,name:"Honey Madeleine",      category:"Cookie", price:2.50,  stock:90, status:"Active"},
+    {id:12,name:"Pavlova",              category:"Dessert",price:9.90,  stock:7,  status:"Low"},
+  ];
+
+  /* ============ State ============ */
+  const state = {len:10, page:1, q:"", sort:{key:"id", dir:"asc", type:"num"}};
+
+  /* ============ Render ============ */
+  function pillFor(status){
+    const map = {Active:"pill pill-teal", Low:"pill pill-cream", Out:"pill pill-pink"};
+    return `<span class="${map[status]||'pill pill-cream'}">${status}</span>`;
+  }
+
+  function filtered(){
+    const q = state.q.trim().toLowerCase();
+    let rows = !q ? DATA.slice() : DATA.filter(r =>
+      Object.values(r).some(v => String(v).toLowerCase().includes(q))
+    );
+    const {key, dir, type} = state.sort;
+    rows.sort((a,b)=>{
+      const av=a[key], bv=b[key];
+      const cmp = type==="num" ? av-bv : String(av).localeCompare(String(bv));
+      return dir==="asc" ? cmp : -cmp;
+    });
+    return rows;
+  }
+
+  function render(){
+    const rows = filtered();
+    const total = rows.length;
+    const pages = Math.max(1, Math.ceil(total/state.len));
+    if(state.page>pages) state.page=pages;
+    const start = (state.page-1)*state.len;
+    const slice = rows.slice(start, start+state.len);
+
+    document.getElementById("tbody").innerHTML = slice.map(r => `
+      <tr>
+        <td>${r.id}</td>
+        <td><strong>${r.name}</strong></td>
+        <td>${r.category}</td>
+        <td>$${r.price.toFixed(2)}</td>
+        <td>${r.stock}</td>
+        <td>${pillFor(r.status)}</td>
+        <td style="text-align:right">
+          <div class="row-actions">
+            <a href="update.html?id=${r.id}" class="btn-icon btn-edit" title="Edit">
+              <i class="fa-solid fa-pen"></i>
+            </a>
+            <button class="btn-icon btn-delete" data-id="${r.id}" data-name="${r.name}" title="Delete">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `).join("") || `<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">No results</td></tr>`;
+
+    document.getElementById("info").textContent =
+      `Showing ${total?start+1:0} to ${Math.min(start+state.len,total)} of ${total} results`;
+
+    // pager
+    const pager = document.getElementById("pager");
+    const btn = (label, page, opts={}) =>
+      `<button ${opts.disabled?"disabled":""} ${opts.active?'class="active"':""} data-page="${page}">${label}</button>`;
+    let html = btn(`<i class="fa-solid fa-angle-left"></i>`, state.page-1, {disabled:state.page===1});
+    for(let p=1;p<=pages;p++) html += btn(p, p, {active:p===state.page});
+    html += btn(`<i class="fa-solid fa-angle-right"></i>`, state.page+1, {disabled:state.page===pages});
+    pager.innerHTML = html;
+
+    // sort indicators
+    document.querySelectorAll("thead th[data-key]").forEach(th=>{
+      th.classList.remove("asc","desc");
+      if(th.dataset.key===state.sort.key) th.classList.add(state.sort.dir);
+    });
+  }
+
+  /* ============ Events ============ */
+  document.getElementById("pageLen").addEventListener("change", e=>{
+    state.len=+e.target.value; state.page=1; render();
+  });
+  document.getElementById("searchInput").addEventListener("input", e=>{
+    state.q=e.target.value; state.page=1; render();
+  });
+  document.querySelectorAll("thead th[data-key]").forEach(th=>{
+    th.addEventListener("click", ()=>{
+      const k=th.dataset.key, type=th.dataset.type||"str";
+      if(state.sort.key===k) state.sort.dir = state.sort.dir==="asc"?"desc":"asc";
+      else state.sort = {key:k, dir:"asc", type};
+      render();
+    });
+  });
+  document.getElementById("pager").addEventListener("click", e=>{
+    const b=e.target.closest("button"); if(!b||b.disabled) return;
+    state.page = +b.dataset.page; render();
+  });
+
+  // SweetAlert delete
+  document.getElementById("tbody").addEventListener("click", e=>{
+    const b=e.target.closest(".btn-delete"); if(!b) return;
+    Swal.fire({
+      title:`Delete "${b.dataset.name}"?`,
+      text:"This action cannot be undone.",
+      icon:"warning",
+      showCancelButton:true,
+      confirmButtonColor:"#D0324B",
+      cancelButtonColor:"#3d2230",
+      confirmButtonText:"Yes, delete it!",
+      background:"#FDF5E7"
+    }).then(res=>{
+      if(res.isConfirmed){
+        // POST to /Controller/Delete/{id} in real app
+        const idx = DATA.findIndex(r=>r.id===+b.dataset.id);
+        if(idx>-1) DATA.splice(idx,1);
+        render();
+        Swal.fire({title:"Deleted!", icon:"success", background:"#FDF5E7",
+          confirmButtonColor:"#2dbba4"});
+      }
+    });
+  });
+
+  /* ============ Layout chrome ============ */
+  document.getElementById("year").textContent = new Date().getFullYear();
+  document.getElementById("sidebarToggle").addEventListener("click", ()=>{
+    document.getElementById("adminShell").classList.toggle("is-collapsed");
+  });
+  const um=document.getElementById("userMenu");
+  document.getElementById("userBtn").addEventListener("click", e=>{
+    e.stopPropagation(); um.classList.toggle("open");
+  });
+  document.addEventListener("click", e=>{ if(!um.contains(e.target)) um.classList.remove("open"); });
+
+  render();
+</script>
+</body>
+</html>

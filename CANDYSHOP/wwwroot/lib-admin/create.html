@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Product — Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div class="admin-shell" id="adminShell">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-cake-candles"></i></span>
+      <span class="brand-text">PIECE<span class="accent">OFCAKE</span></span>
+    </div>
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="topbar-right">
+      <div class="user-menu" id="userMenu">
+        <button class="icon-btn" id="userBtn" aria-label="User menu"><i class="fa-solid fa-user"></i></button>
+        <div class="user-dropdown">
+          <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+      </div>
+      <a class="icon-btn" href="../index.html" target="_blank" rel="noopener" title="Open public site">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+  </header>
+
+  <aside class="sidebar">
+    <div class="sidebar-divider">Main</div>
+    <a class="nav-item" href="#"><i class="fa-solid fa-gauge-high"></i><span>Dashboard</span></a>
+    <a class="nav-item active" href="index.html"><i class="fa-solid fa-table-list"></i><span>Products</span></a>
+    <div class="sidebar-divider">Management</div>
+    <a class="nav-item" href="#"><i class="fa-solid fa-mug-saucer"></i><span>Menu</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-calendar-day"></i><span>Orders</span></a>
+    <a class="nav-item" href="#"><i class="fa-solid fa-envelope"></i><span>Messages</span><span class="nav-badge">3</span></a>
+  </aside>
+
+  <main class="main">
+    <div class="page-head">
+      <div class="crumbs">
+        <i class="fa-solid fa-house" style="color:var(--pink)"></i>
+        <span>Home</span><span class="sep">/</span>
+        <a href="index.html" style="color:var(--muted)">Products</a>
+        <span class="sep">/</span>
+        <span class="here">Add New</span>
+      </div>
+      <a href="index.html" class="btn-ghost">
+        <i class="fa-solid fa-arrow-left"></i> Back to list
+      </a>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><i class="fa-solid fa-plus"></i> New Product</div>
+      <div class="card-body">
+        <form id="createForm" onsubmit="event.preventDefault();window.location='index.html'">
+          <div class="form-grid">
+
+            <div class="form-group">
+              <label>Name <span class="req">*</span></label>
+              <input class="form-input" type="text" name="name" placeholder="e.g. Strawberry Shortcake" required>
+            </div>
+
+            <div class="form-group">
+              <label>Category <span class="req">*</span></label>
+              <select class="form-input" name="category" required>
+                <option value="">— Select —</option>
+                <option>Cake</option><option>Cupcake</option><option>Cookie</option>
+                <option>Pastry</option><option>Dessert</option><option>Tart</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Price ($) <span class="req">*</span></label>
+              <input class="form-input" type="number" step="0.01" min="0" name="price" placeholder="0.00" required>
+            </div>
+
+            <div class="form-group">
+              <label>Stock <span class="req">*</span></label>
+              <input class="form-input" type="number" min="0" name="stock" placeholder="0" required>
+            </div>
+
+            <div class="form-group">
+              <label>Status</label>
+              <select class="form-input" name="status">
+                <option>Active</option><option>Low</option><option>Out</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Image URL</label>
+              <input class="form-input" type="url" name="image" placeholder="https://…">
+            </div>
+
+            <div class="form-group full">
+              <label>Description</label>
+              <textarea class="form-input" name="description" placeholder="Short description shown on the public site…"></textarea>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <a href="index.html" class="btn-ghost"><i class="fa-solid fa-xmark"></i> Cancel</a>
+            <button type="submit" class="btn-save"><i class="fa-solid fa-floppy-disk"></i> Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="left"><span id="year"></span> &copy;
+      <a href="https://github.com/zaruyashar" target="_blank" rel="noopener">zaruyashar</a>
+    </div>
+    <div class="right">Project #2 of SoftITo Backend Development Program</div>
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.getElementById('sidebarToggle').addEventListener('click',()=>document.getElementById('adminShell').classList.toggle('is-collapsed'));
+  const um=document.getElementById('userMenu');
+  document.getElementById('userBtn').addEventListener('click',e=>{e.stopPropagation();um.classList.toggle('open');});
+  document.addEventListener('click',e=>{if(!um.contains(e.target))um.classList.remove('open');});
+</script>
+</body>
+</html>

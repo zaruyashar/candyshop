@@ -1,0 +1,138 @@
+@model List<CANDYSHOP.Models.BlogPost>
+@{
+    ViewData["Title"] = "Blog Home";
+}
+
+@functions {
+    string ResolveImageUrl(string? path, string defaultPath = "img/logo.png")
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return Url.Content("~/" + defaultPath);
+
+        var cleanPath = path.Trim().Replace("\\", "/").TrimStart('/');
+
+        if (cleanPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+                    cleanPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            return cleanPath;
+        }
+
+        return Url.Content("~/" + cleanPath);
+    }
+}
+
+<!-- Section Blog -->
+<section id="blog-main">
+    <div class="jumbotron" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/bannerblog.jpg")'); background-size: cover; min-height: 250px;"></div>
+    <div class="page-title" data-0="background-position:98% 40px,2% 40px;" data-end="background-position:98% -400px,2% -400px" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/bake_pattern.png")'); background-repeat: repeat;">
+        <h1>Blog home</h1>
+        <!-- breadcrumb -->
+        <ul class="breadcrumb">
+            <li><a href="@Url.Action("Index", "Home")">Home</a> <span class="divider"></span></li>
+            <li class="active">Blog Home</li>
+        </ul>
+        <!-- /breadcrumb -->
+    </div>
+    <div class="container">
+        <div class="row">
+            <!-- Blog Home -->
+            <div class="col-md-8">
+                <div class="row">
+                    @if (Model == null || !Model.Any())
+                    {
+                        <div class="col-md-12 text-center" style="padding: 40px 0;">
+                            <h3>No blog posts found.</h3>
+                        </div>
+                    }
+                    else
+                    {
+                        @foreach (var post in Model)
+                        {
+                            <!-- Blog Post -->
+                            <div class="blog-post col-md-12">
+                                <!-- blog image -->
+                                <div class="img-zoom">
+                                    <a href="@Url.Action("BlogPost", "Home", new { id = post.Id })">
+                                        <img class="img-responsive" src="@ResolveImageUrl(post.ImagePath, "img/blog1.jpg")" alt="@post.Title" style="max-height: 350px; width: 100%; object-fit: cover;">
+                                    </a>
+                                </div>
+                                <!-- post info -->
+                                <div class="post-review">
+                                    <!-- Comments -->
+                                    <ul class="post-comment">
+                                        <li>@post.CreatedDate.ToString("dd")<small>@post.CreatedDate.ToString("MMM")</small></li>
+                                        <li><i class="fa fa-comments-o"></i><a href="@Url.Action("BlogPost", "Home", new { id = post.Id })"><small>@post.CommentCount</small></a></li>
+                                    </ul>
+                                    <!-- Title -->
+                                    <h4 class="post-title">
+                                        <a href="@Url.Action("BlogPost", "Home", new { id = post.Id })">@post.Title</a>
+                                    </h4>
+                                    <!-- Description -->
+                                    <p class="post-description">
+                                        @post.Summary
+                                    </p>
+                                    <!-- Button -->
+                                    <div class="text-center page-scroll">
+                                        <a class="btn" href="@Url.Action("BlogPost", "Home", new { id = post.Id })">
+                                            <div class="btn-line"></div>
+                                            <div class="btn-line btn-line-shift"></div>
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- /Post-review -->
+                            </div>
+                            <!-- /blog-post-->
+                        }
+                    }
+                </div>
+                <!-- /row-->
+            </div>
+            <!-- /col-md-8 -->
+            <!-- Sidebar Column -->
+            <div class="sidebar col-md-4">
+                <!-- About us Widget -->
+                <div class="well">
+                    <h5>About Us</h5>
+                    <p>Piece of Cake is a custom confectionery shop specializing in birthday cakes, cupcakes, and pastries baked fresh daily.</p>
+                    <!-- Social Media icons -->
+                    <div class="social-media smaller">
+                        <a href="https://x.com"><i class="fa fa-twitter"></i></a>
+                        <a href="https://facebook.com"><i class="fa fa-facebook"></i></a>
+                        <a href="https://instagram.com"><i class="fa fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- popular posts widget -->
+                <div class="well">
+                    <h5>Popular posts</h5>
+                    <div class="panel panel-default popular-posts">
+                        <div class="panel-body">
+                            <ul class="media-list">
+                                @if (Model != null)
+                                {
+                                    @foreach (var popular in Model.Take(3))
+                                    {
+                                        <li class="media" style="margin-bottom: 15px;">
+                                            <div class="media-left">
+                                                <a href="@Url.Action("BlogPost", "Home", new { id = popular.Id })">
+                                                    <img src="@ResolveImageUrl(popular.ImagePath, "img/blog1.jpg")" class="img-responsive img-rounded" alt="" style="width: 60px; height: 60px; object-fit: cover;">
+                                                </a>
+                                            </div>
+                                            <div class="media-body">
+                                                <a href="@Url.Action("BlogPost", "Home", new { id = popular.Id })">
+                                                    <h6 class="media-heading" style="font-weight: bold; margin-top: 0;">@popular.Title</h6>
+                                                </a>
+                                                <small>Posted on @popular.CreatedDate.ToString("dd MMMM")</small>
+                                            </div>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

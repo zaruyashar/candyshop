@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<!--
+  Piece of Cake — Admin Layout
+  This file is the wrapper. Drop your page content into <main class="main">…</main>
+  In an ASP.NET MVC project, rename to _AdminLayout.cshtml and replace the
+  <!-- @RenderBody() --> marker with: @RenderBody()
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Piece of Cake</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div class="admin-shell" id="adminShell">
+
+  <!-- ========== TOPBAR ========== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-cake-candles"></i></span>
+      <span class="brand-text">PIECE<span class="accent">OFCAKE</span></span>
+    </div>
+
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="topbar-right">
+      <!-- person → dropdown -->
+      <div class="user-menu" id="userMenu">
+        <button class="icon-btn" id="userBtn" aria-label="User menu">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <div class="user-dropdown">
+          <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+      </div>
+      <!-- external link → opens public site -->
+      <a class="icon-btn" href="../index.html" target="_blank" rel="noopener" title="Open public site">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-divider">Main</div>
+    <a class="nav-item active" href="index.html">
+      <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+    </a>
+    <a class="nav-item" href="index.html">
+      <i class="fa-solid fa-table-list"></i><span>Products</span>
+    </a>
+
+    <div class="sidebar-divider">Management</div>
+    <a class="nav-item" href="#">
+      <i class="fa-solid fa-mug-saucer"></i><span>Menu</span>
+    </a>
+    <a class="nav-item" href="#">
+      <i class="fa-solid fa-calendar-day"></i><span>Orders</span>
+    </a>
+    <a class="nav-item" href="#">
+      <i class="fa-solid fa-envelope"></i><span>Messages</span>
+      <span class="nav-badge">3</span>
+    </a>
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+    <!-- @RenderBody() -->
+    <div class="card">
+      <div class="card-head"><i class="fa-solid fa-circle-info"></i> Layout Preview</div>
+      <div class="card-body">
+        <p>This is the shared <strong>_AdminLayout</strong>. Page content renders here.
+           See <a href="index.html">index.html</a>, <a href="create.html">create.html</a>,
+           <a href="update.html">update.html</a> for listing/add/edit views.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="left">
+      <span id="year"></span> &copy;
+      <a href="https://github.com/zaruyashar" target="_blank" rel="noopener">zaruyashar</a>
+    </div>
+    <div class="right">Project #2 of SoftITo Backend Development Program</div>
+  </footer>
+
+</div>
+
+<script>
+  // current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // sidebar collapse toggle
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('adminShell').classList.toggle('is-collapsed');
+  });
+
+  // user dropdown
+  const um = document.getElementById('userMenu');
+  document.getElementById('userBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    um.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!um.contains(e.target)) um.classList.remove('open');
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@ViewData["Title"] — Piece of Cake Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Paytone+One&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="~/lib-admin/admin.css">
+
+  <!-- SweetAlert2 for delete confirmations -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<div class="admin-shell" id="adminShell">
+
+  <!-- ========== TOPBAR ========== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon"><i class="fa-solid fa-cake-candles"></i></span>
+      <span class="brand-text">SWEET<span class="accent">ADMIN</span></span>
+    </div>
+
+    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar" aria-label="Toggle sidebar">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <div class="topbar-right">
+      <!-- Topbar message icon with unread red alert dot -->
+      <a class="icon-btn" href="@Url.Action("Messages", "Admin")" title="Messages" style="position: relative; color: inherit; text-decoration: none;">
+        <i class="fa-solid fa-envelope"></i>
+        @if (ViewBag.UnreadMessagesCount != null && ViewBag.UnreadMessagesCount > 0)
+        {
+            <span style="position: absolute; top: -2px; right: -2px; width: 10px; height: 10px; background-color: var(--pink); border-radius: 50%; border: 2px solid white;"></span>
+        }
+      </a>
+      
+      <div class="user-menu" id="userMenu">
+        <button class="icon-btn" id="userBtn" aria-label="User menu">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <div class="user-dropdown">
+          <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+          <a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+      </div>
+      <a class="icon-btn" href="@Url.Action("Index", "Home")" target="_blank" rel="noopener" title="Open public site">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar">
+    <div class="sidebar-divider">Main</div>
+    <a class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" && ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")" href="@Url.Action("Index", "Admin")">
+      <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+    </a>
+
+    <div class="sidebar-divider">Management</div>
+    <a class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Products" || ViewContext.RouteData.Values["action"]?.ToString() == "Create" || ViewContext.RouteData.Values["action"]?.ToString() == "Edit" ? "active" : "")" href="@Url.Action("Products", "Admin")">
+      <i class="fa-solid fa-table-list"></i><span>Products</span>
+    </a>
+    
+    <a class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "BlogPosts" || ViewContext.RouteData.Values["action"]?.ToString() == "BlogPostCreate" || ViewContext.RouteData.Values["action"]?.ToString() == "BlogPostEdit" ? "active" : "")" href="@Url.Action("BlogPosts", "Admin")">
+      <i class="fa-solid fa-blog"></i><span>Blog Posts</span>
+    </a>
+    
+    <a class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Testimonials" || ViewContext.RouteData.Values["action"]?.ToString() == "TestimonialCreate" || ViewContext.RouteData.Values["action"]?.ToString() == "TestimonialEdit" ? "active" : "")" href="@Url.Action("Testimonials", "Admin")">
+      <i class="fa-solid fa-comment-dots"></i><span>Testimonials</span>
+    </a>
+
+    <a class="nav-item @(ViewContext.RouteData.Values["action"]?.ToString() == "Messages" ? "active" : "")" href="@Url.Action("Messages", "Admin")">
+      <i class="fa-solid fa-envelope"></i><span>Messages</span>
+      @if (ViewBag.UnreadMessagesCount != null && ViewBag.UnreadMessagesCount > 0)
+      {
+          <span class="nav-badge">@ViewBag.UnreadMessagesCount</span>
+      }
+    </a>
+  </aside>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+      @RenderBody()
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="left">
+      <span id="year"></span> &copy;
+      <a href="https://github.com/zaruyashar" target="_blank" rel="noopener">zaruyashar</a>
+    </div>
+    <div class="right">Project #2 of SoftITo Backend Development Program</div>
+  </footer>
+
+</div>
+
+<script>
+  // current year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // sidebar collapse toggle
+  document.getElementById('sidebarToggle').addEventListener('click', () => {
+    document.getElementById('adminShell').classList.toggle('is-collapsed');
+  });
+
+  // user dropdown
+  const um = document.getElementById('userMenu');
+  document.getElementById('userBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    um.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (um && !um.contains(e.target)) um.classList.remove('open');
+  });
+</script>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

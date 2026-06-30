@@ -1,8 +1,889 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model CANDYSHOP.Models.HomeIndexViewModel
+@{
+    ViewData["Title"] = "Home";
+    
+    // Categorize products for menu tabs (case-insensitive with fallback of unmatched products to Sweets)
+    var cakes = Model.Products.Where(p => 
+        string.Equals(p.Category, "Cake", StringComparison.OrdinalIgnoreCase) || 
+        string.Equals(p.Category, "Cupcake", StringComparison.OrdinalIgnoreCase) || 
+        string.Equals(p.Category, "Tart", StringComparison.OrdinalIgnoreCase)
+    ).ToList();
+
+    var pastries = Model.Products.Where(p => 
+        string.Equals(p.Category, "Pastry", StringComparison.OrdinalIgnoreCase)
+    ).ToList();
+
+    var sweets = Model.Products.Where(p => 
+        !cakes.Contains(p) && !pastries.Contains(p)
+    ).ToList();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@functions {
+    string ResolveImageUrl(string? path, string defaultPath = "img/logo.png")
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return Url.Content("~/lib-candy/pieceofcake_html/" + defaultPath);
+        
+        var cleanPath = path.Trim().Replace("\\", "/").TrimStart('/');
+        
+        if (cleanPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || 
+            cleanPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            return cleanPath;
+        }
+
+        if (cleanPath.StartsWith("img/", StringComparison.OrdinalIgnoreCase))
+        {
+            cleanPath = "lib-candy/pieceofcake_html/" + cleanPath;
+        }
+        
+        return Url.Content("~/" + cleanPath);
+    }
+}
+
+      <!-- Slider -->
+      <div class="slider-container">
+         <!-- Controls -->
+         <div class="slider-control left inactive"></div>
+         <div class="slider-control right"></div>
+         <ul class="slider-pagi"></ul>
+         <!--Slider -->
+         <div class="slider">
+            <!-- Slide 0 -->
+            <div class="slide slide-0 active">
+               <div class="slide__bg" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/slide1.jpg")');"></div>
+               <div class="slide__content">
+                  <svg version="1.1" class="slide__overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 294.996 294.996" style="enable-background:new 0 0 294.996 294.996;" xml:space="preserve">
+                     <path d="M280.977,118.478c-13.619-10.807-20.563-27.57-18.574-44.845c1.3-11.3-2.566-22.393-10.607-30.432
+                         c-8.044-8.043-19.136-11.909-30.434-10.607c-17.281,1.986-34.037-4.954-44.844-18.573C169.449,5.11,158.872,0,147.499,0
+                         c-11.374,0-21.951,5.11-29.021,14.02c-10.807,13.618-27.564,20.56-44.841,18.575c-11.3-1.305-22.393,2.563-30.435,10.605
+                         c-8.043,8.04-11.909,19.133-10.609,30.435c1.989,17.272-4.954,34.035-18.576,44.844C5.11,125.549,0,136.126,0,147.498
+                         s5.109,21.949,14.019,29.021c13.62,10.808,20.563,27.57,18.574,44.845c-1.3,11.3,2.566,22.393,10.607,30.432
+                         c8.044,8.043,19.145,11.911,30.434,10.607c17.274-1.988,34.037,4.954,44.844,18.573c7.069,8.91,17.646,14.021,29.021,14.021
+                         c11.373,0,21.95-5.11,29.02-14.02c10.808-13.618,27.565-20.559,44.841-18.575c11.301,1.299,22.393-2.563,30.435-10.605
+                         c8.043-8.04,11.909-19.133,10.609-30.434c-1.989-17.273,4.955-34.037,18.576-44.845c8.907-7.07,14.017-17.647,14.017-29.02
+                         S289.886,125.549,280.977,118.478z"/>
+                  </svg>
+                  <div class="slide__text">
+                     <h1><span>Welcome to</span><br>Piece of cake</h1>
+                     <div class="hidden-xs hidden-sm hidden-md">
+                        <p class="subtitle">Your ultimate destination for custom cakes, cupcakes, and sweet pastries made fresh everyday with love.</p>
+                        <div class="page-scroll">
+                           <a class="btn" href="#contact">
+                              <div class="btn-line"></div>
+                              <div class="btn-line btn-line-shift"></div>
+                              Contact us
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Slide 1 -->
+            <div class="slide slide-1">
+               <div class="slide__bg" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/slide2.jpg")');"></div>
+               <div class="slide__content">
+                  <svg version="1.1" class="slide__overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 294.996 294.996" style="enable-background:new 0 0 294.996 294.996;" xml:space="preserve">
+                     <path d="M280.977,118.478c-13.619-10.807-20.563-27.57-18.574-44.845c1.3-11.3-2.566-22.393-10.607-30.432
+                         c-8.044-8.043-19.136-11.909-30.434-10.607c-17.281,1.986-34.037-4.954-44.844-18.573C169.449,5.11,158.872,0,147.499,0
+                         c-11.374,0-21.951,5.11-29.021,14.02c-10.807,13.618-27.564,20.56-44.841,18.575c-11.3-1.305-22.393,2.563-30.435,10.605
+                         c-8.043,8.04-11.909,19.133-10.609,30.435c1.989,17.272-4.954,34.035-18.576,44.844C5.11,125.549,0,136.126,0,147.498
+                         s5.109,21.949,14.019,29.021c13.62,10.808,20.563,27.57,18.574,44.845c-1.3,11.3,2.566,22.393,10.607,30.432
+                         c8.044,8.043,19.145,11.911,30.434,10.607c17.274-1.988,34.037,4.954,44.844,18.573c7.069,8.91,17.646,14.021,29.021,14.021
+                         c11.373,0,21.95-5.11,29.02-14.02c10.808-13.618,27.565-20.559,44.841-18.575c11.301,1.299,22.393-2.563,30.435-10.605
+                         c8.043-8.04,11.909-19.133,10.609-30.434c-1.989-17.273,4.955-34.037,18.576-44.845c8.907-7.07,14.017-17.647,14.017-29.02
+                         S289.886,125.549,280.977,118.478z"/>
+                  </svg>
+                  <div class="slide__text">
+                     <h1><span>We Love</span><br>Cupcakes</h1>
+                     <div class="hidden-xs hidden-sm hidden-md">
+                        <p class="subtitle">Indulge in our freshly baked cupcakes, designed with premium ingredients and hand-crafted with sweet love daily.</p>
+                        <div class="page-scroll">
+                           <a class="btn" href="#contact">
+                              <div class="btn-line"></div>
+                              <div class="btn-line btn-line-shift"></div>
+                              Contact us
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="slide slide-2">
+               <div class="slide__bg" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/slide3.jpg")');"></div>
+               <div class="slide__content">
+                  <svg version="1.1" class="slide__overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 294.996 294.996" style="enable-background:new 0 0 294.996 294.996;" xml:space="preserve">
+                     <path d="M280.977,118.478c-13.619-10.807-20.563-27.57-18.574-44.845c1.3-11.3-2.566-22.393-10.607-30.432
+                         c-8.044-8.043-19.136-11.909-30.434-10.607c-17.281,1.986-34.037-4.954-44.844-18.573C169.449,5.11,158.872,0,147.499,0
+                         c-11.374,0-21.951,5.11-29.021,14.02c-10.807,13.618-27.564,20.56-44.841,18.575c-11.3-1.305-22.393,2.563-30.435,10.605
+                         c-8.043,8.04-11.909,19.133-10.609,30.435c1.989,17.272-4.954,34.035-18.576,44.844C5.11,125.549,0,136.126,0,147.498
+                         s5.109,21.949,14.019,29.021c13.62,10.808,20.563,27.57,18.574,44.845c-1.3,11.3,2.566,22.393,10.607,30.432
+                         c8.044,8.043,19.145,11.911,30.434,10.607c17.274-1.988,34.037,4.954,44.844,18.573c7.069,8.91,17.646,14.021,29.021,14.021
+                         c11.373,0,21.95-5.11,29.02-14.02c10.808-13.618,27.565-20.559,44.841-18.575c11.301,1.299,22.393-2.563,30.435-10.605
+                         c8.043-8.04,11.909-19.133,10.609-30.434c-1.989-17.273,4.955-34.037,18.576-44.845c8.907-7.07,14.017-17.647,14.017-29.02
+                         S289.886,125.549,280.977,118.478z"/>
+                  </svg>
+                  <div class="slide__text">
+                     <h1><span>We make cakes for</span><br>Your event</h1>
+                     <div class="hidden-xs hidden-sm hidden-md">
+                        <p class="subtitle">From custom wedding cakes to birthdays, we make your special events memorable with stunning designs.</p>
+                        <div class="page-scroll">
+                           <a class="btn" href="#contact">
+                              <div class="btn-line"></div>
+                              <div class="btn-line btn-line-shift"></div>
+                              Contact us
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="slide slide-3">
+               <div class="slide__bg" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/slide4.jpg")');"></div>
+               <div class="slide__content">
+                  <svg version="1.1" class="slide__overlay" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 294.996 294.996" style="enable-background:new 0 0 294.996 294.996;" xml:space="preserve">
+                     <path d="M280.977,118.478c-13.619-10.807-20.563-27.57-18.574-44.845c1.3-11.3-2.566-22.393-10.607-30.432
+                         c-8.044-8.043-19.136-11.909-30.434-10.607c-17.281,1.986-34.037-4.954-44.844-18.573C169.449,5.11,158.872,0,147.499,0
+                         c-11.374,0-21.951,5.11-29.021,14.02c-10.807,13.618-27.564,20.56-44.841,18.575c-11.3-1.305-22.393,2.563-30.435,10.605
+                         c-8.043,8.04-11.909,19.133-10.609,30.435c1.989,17.272-4.954,34.035-18.576,44.844C5.11,125.549,0,136.126,0,147.498
+                         s5.109,21.949,14.019,29.021c13.62,10.808,20.563,27.57,18.574,44.845c-1.3,11.3,2.566,22.393,10.607,30.432
+                         c8.044,8.043,19.145,11.911,30.434,10.607c17.274-1.988,34.037,4.954,44.844,18.573c7.069,8.91,17.646,14.021,29.021,14.021
+                         c11.373,0,21.95-5.11,29.02-14.02c10.808-13.618,27.565-20.559,44.841-18.575c11.301,1.299,22.393-2.563,30.435-10.605
+                         c8.043-8.04,11.909-19.133,10.609-30.434c-1.989-17.273,4.955-34.037,18.576-44.845c8.907-7.07,14.017-17.647,14.017-29.02
+                         S289.886,125.549,280.977,118.478z"/>
+                  </svg>
+                  <div class="slide__text">
+                     <h1><span>Try our amazing</span><br>Macarons</h1>
+                     <div class="hidden-xs hidden-sm hidden-md">
+                        <p class="subtitle">Try our sweet, colorful French macarons, perfect for gifting or treating yourself to pure joy.</p>
+                        <div class="page-scroll">
+                           <a class="btn" href="#contact">
+                              <div class="btn-line"></div>
+                              <div class="btn-line btn-line-shift"></div>
+                              Contact us
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <!-- Section offer -->	
+      <section id="offer" class="color-section">
+         <div class="container" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/offer.png")'); background-repeat: no-repeat; background-position: 82% 20px;">
+            <div class="col-md-6 text-center">
+               <h4>Offer of the Week</h4>
+               <p>Enjoy our specially crafted dessert of the week, baked fresh with premium organic ingredients and rich chocolate filling.</p>
+               <div class="page-scroll">
+                  <a class="btn" href="#menu">
+                     <div class="btn-line"></div>
+                     <div class="btn-line btn-line-shift"></div>
+                     Check our menu
+                  </a>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Services -->
+      <section id="services">
+         <div class="container">
+            <div class="col-lg-12">
+               <div class="section-heading">
+                  <h2>Our Services</h2>
+                  <div class="hr"></div>
+               </div>
+            </div>
+            <div class="row services-row">
+               <div class="col-lg-4 col-md-4 col-md-offset-1">
+                  <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/servicesmain.png" alt="">
+               </div>
+               <div class="col-lg-7 col-md-7">
+                  <h3>You can't buy happiness <br> but you can buy CAKE</h3>
+                  <h4><small>And that's kind of the same thing!</small></h4>
+                  <p>We pride ourselves on offering a wide range of custom confectionery services, catering to every sweet tooth. From personalized party tables to elaborate wedding towers, we ensure that every cake is baked to absolute perfection using only the finest ingredients.</p>
+
+                     vel mauris ultricies, vest ibulum orci eget,Fusce mollis imperdiet interdum donec eget metus auguen unc vel
+                     baked to absolute perfection using only the finest ingredients.   
+                  </p>
+                  <div class="page-scroll">
+                     <a class="btn" href="#contact">
+                        <div class="btn-line"></div>
+                        <div class="btn-line btn-line-shift"></div>
+                        Contact us Today
+                     </a>
+                  </div>
+               </div>
+            </div>
+            <div class="row margin1">
+               <div class="owl-carousel" id="owl-services">
+                  <!-- Box 1 -->
+                  <div class="col-xs-12">
+                     <div class="box_icon">
+                        <div class="icon">
+                           <div class="image"> 
+                              <img class="img-responsive img-circle" src="~/lib-candy/pieceofcake_html/img/service1.jpg" alt="">
+                           </div>
+                           <div class="info">
+                              <h5>Weddings</h5>
+                              <p>Custom-designed multi-tier wedding cakes tailored to your unique love story and reception theme.</p>
+                              <div class="page-scroll">
+                                 <a class="btn" href="#contact">
+                                    <div class="btn-line"></div>
+                                    <div class="btn-line btn-line-shift"></div>
+                                    More
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Box 2 -->
+                  <div class="col-xs-12">
+                     <div class="box_icon">
+                        <div class="icon">
+                           <div class="image"> 
+                              <img class="img-responsive img-circle" src="~/lib-candy/pieceofcake_html/img/service2.jpg" alt="">
+                           </div>
+                           <div class="info">
+                              <h5>Corporate Events</h5>
+                              <p>Elevate your corporate events, meetings, and brand launches with customized logo cupcakes and elegant pastry platters.</p>
+                              <div class="page-scroll">
+                                 <a class="btn" href="#contact">
+                                    <div class="btn-line"></div>
+                                    <div class="btn-line btn-line-shift"></div>
+                                    More
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Box 3 -->
+                  <div class="col-xs-12">
+                     <div class="box_icon">
+                        <div class="icon">
+                           <div class="image"> 
+                              <img class="img-responsive img-circle" src="~/lib-candy/pieceofcake_html/img/service3.jpg" alt="">
+                           </div>
+                           <div class="info">
+                              <h5>Birthdays</h5>
+                              <p>Fun, creative, and delicious birthday cakes and custom cupcakes that kids and adults will adore.</p>
+                              <div class="page-scroll">
+                                 <a class="btn" href="#contact">
+                                    <div class="btn-line"></div>
+                                    <div class="btn-line btn-line-shift"></div>
+                                    More
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- Box 4 -->
+                  <div class="col-xs-12">
+                     <div class="box_icon">
+                        <div class="icon">
+                           <div class="image"> 
+                              <img class="img-responsive img-circle" src="~/lib-candy/pieceofcake_html/img/service4.jpg" alt="">
+                           </div>
+                           <div class="info">
+                              <h5>Gourmet</h5>
+                              <p>Exquisite cupcakes and macarons baked with rare extracts, organic fruits, and premium dark chocolate.</p>
+                              <div class="page-scroll">
+                                 <a class="btn" href="#contact">
+                                    <div class="btn-line"></div>
+                                    <div class="btn-line btn-line-shift"></div>
+                                    More
+                                 </a>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section About --> 
+      <section id="about" class="color-section2">
+         <div class="container">
+            <div class="section-heading">
+               <h2>About Us</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="row">
+               <div class="col-lg-8 col-sm-12">
+                  <h3>Baking Delicious cakes since 1990</h3>
+                  <p>We began our sweet journey in 1990 with a small kitchen and a big dream. Over the years, we have perfected our traditional baking techniques while embracing modern, elegant confectionery trends. Every single recipe is crafted from scratch using high-quality butter, organic fresh fruits, and handpicked gourmet chocolates.</p>
+                  <p>Whether you're looking for a bespoke wedding cake, custom themed cupcakes, or délicieuse pastries, we have something to delight your senses. We take pride in being a part of your sweet celebrations and creating edible art that tastes as good as it looks.</p>
+                  <div class="panel-group" id="accordion">
+                     <!-- Question 1 -->
+                     <div class="panel">
+                        <div class="panel-heading">
+                           <h5 class="panel-title">
+                              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Social Responsability</a>
+                           </h5>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse in">
+                           <div class="panel-body">
+                              <p>
+                                 We are committed to sourcing our milk, eggs, and flour from local sustainable farms. We also donate a percentage of our weekly baked goods to local shelters and community events. 
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Question 2 -->
+                     <div class="panel">
+                        <div class="panel-heading">
+                           <h5 class="panel-title">
+                              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Mission Statement</a>
+                           </h5>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse">
+                           <div class="panel-body">
+                              <p>
+                                 We are committed to sourcing our milk, eggs, and flour from local sustainable farms. We also donate a percentage of our weekly baked goods to local shelters and community events. 
+                              </p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="owl-icons" class="owl-carousel features-icon">
+               <div class="col-sm-12">
+                  <div class="media text-center">
+                     <i class="flaticon-electric-mixer"></i>
+                     <div class="media-body">
+                        <h5>Made With Love</h5>
+                        <p>Every cake, cupcake, and pastry is prepared with undivided attention, care, and the finest selection of ingredients.</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-sm-12">
+                  <div class="media text-center">
+                     <i class="flaticon-gingerbread"></i>
+                     <div class="media-body">
+                        <h5>Seasonal Pastries</h5>
+                        <p>Celebrate changing seasons with our limited-edition menus, featuring seasonal fresh fruits, spices, and custom themes.</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-sm-12">
+                  <div class="media text-center">
+                     <i class="flaticon-food-5"></i>
+                     <div class="media-body">
+                        <h5>Event Catering</h5>
+                        <p>From simple corporate gatherings to large grand receptions, we cater beautiful dessert tables that impress guests.</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section testimonials --> 
+      <section id="testimonials" class="color-section">
+         <div class="container">
+            <!-- Parallax objects -->
+            <div class="parallax-object hidden-sm hidden-xs hidden-md" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/cake3.png")'); width: 100px; height: 100px; position: absolute;"
+              data-bottom-top="left:0%;margin-top:-30px;transform:translatey(0%);"
+               data-top="transform:translatey(-120%);">
+            </div>
+            <div class="parallax-object hidden-sm hidden-xs hidden-md" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/cake1.png")'); width: 100px; height: 100px; position: absolute;"
+               data-bottom-top="left:60px;margin-top:120px;transform:translatey(0%);"
+               data-top="transform:translatey(-120%);">
+            </div>
+            <!-- Section Heading -->
+            <div class="section-heading">
+               <h2>What our clients say</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div id="owl-testimonial" class="owl-carousel">
+                      @if (Model.Testimonials != null && Model.Testimonials.Any())
+                      {
+                          @foreach (var testimonial in Model.Testimonials)
+                          {
+                              <div class="testimonial">
+                                 <div class="testimonial-pic">
+                                    <img src="@ResolveImageUrl(testimonial.ImagePath, "img/testimonial1.jpg")" alt="" class="img-circle" style="width: 80px; height: 80px; object-fit: cover; display: inline-block;">
+                                 </div>
+                                 <div class="testimonial-content">
+                                    <p class="description">
+                                       @testimonial.Comment
+                                    </p>
+                                    <h3 class="testimonial-title">@testimonial.ClientName</h3>
+                                    <small class="post">/ @testimonial.Role</small>
+                                 </div>
+                              </div>
+                          }
+                      }
+                      else
+                      {
+                          <div class="testimonial">
+                             <div class="testimonial-pic">
+                                <img src="@ResolveImageUrl("img/testimonial1.jpg")" alt="" class="img-circle" style="width: 80px; height: 80px; object-fit: cover; display: inline-block;">
+                             </div>
+                             <div class="testimonial-content">
+                                <p class="description">
+                                   The cakes from Piece of Cake are an absolute highlight at every single event I host. Not only are they visually stunning masterpieces, but the flavor is exceptionally rich, moist, and delicious!
+                                </p>
+                                <h3 class="testimonial-title">Lana King</h3>
+                                <small class="post">/ TV Star</small>
+                             </div>
+                          </div>
+                          <div class="testimonial">
+                             <div class="testimonial-pic">
+                                <img src="@ResolveImageUrl("img/testimonial2.jpg")" alt="" class="img-circle" style="width: 80px; height: 80px; object-fit: cover; display: inline-block;">
+                             </div>
+                             <div class="testimonial-content">
+                                <p class="description">
+                                   Their attention to detail is outstanding! The pastries and cupcakes were the star of our anniversary dinner. Truly professional bakers with gourmet taste.
+                                </p>
+                                <h3 class="testimonial-title">Jonas Smith</h3>
+                                <small class="post">/ Chef</small>
+                             </div>
+                          </div>
+                          <div class="testimonial">
+                             <div class="testimonial-pic">
+                                <img src="@ResolveImageUrl("img/testimonial3.jpg")" alt="" class="img-circle" style="width: 80px; height: 80px; object-fit: cover; display: inline-block;">
+                             </div>
+                             <div class="testimonial-content">
+                                <p class="description">
+                                   Absolutely delicious pastries! I order custom cakes for all my family celebrations, and they never disappoint. The customer service is as sweet as their treats.
+                                </p>
+                                <h3 class="testimonial-title">Maria Silva</h3>
+                                <small class="post">/ Cake Specialist</small>
+                             </div>
+                          </div>
+                      }
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Blogprev --> 
+      <section id="blog-preview">
+         <div class="container">
+            <div class="section-heading">
+               <h2>Latest Blog Posts</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="row">
+               <div class="col-md-12">
+                  <div id="owl-blog" class="owl-carousel">
+                     @foreach (var post in Model.BlogPosts)
+                     {
+                         <div class="blog-post">
+                            <div class="img-zoom">
+                               <a href="@Url.Action("BlogPost", "Home", new { id = post.Id })">
+                               <img class="img-responsive" src="@ResolveImageUrl(post.ImagePath, "img/blog1.jpg")" alt="@post.Title">
+                               </a>
+                            </div>
+                            <div class="post-review">
+                               <ul class="post-comment">
+                                  <li>@post.CreatedDate.ToString("dd")<small>@post.CreatedDate.ToString("MMM")</small></li>
+                                  <li><i class="fa fa-comments-o"></i><a href="@Url.Action("BlogPost", "Home", new { id = post.Id })"><small>@post.CommentCount</small></a></li>
+                               </ul>
+                               <h4 class="post-title">
+                                  <a href="@Url.Action("BlogPost", "Home", new { id = post.Id })">@post.Title</a>
+                               </h4>
+                               <p class="post-description">
+                                  @post.Summary
+                               </p>
+                               <div class="text-center page-scroll">
+                                  <a class="btn" href="@Url.Action("BlogPost", "Home", new { id = post.Id })">
+                                     <div class="btn-line"></div>
+                                     <div class="btn-line btn-line-shift"></div>
+                                     Read More
+                                  </a>
+                               </div>
+                            </div>
+                         </div>
+                     }
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Menu --> 
+      <section id="menu" class="color-section2">
+         <div class="container">
+            <div class="section-heading">
+               <h2>Our Menu</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="col-md-12">
+               <div class="col-md-12 no-padding">
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a href="#tab1" data-toggle="tab">Cakes</a></li>
+                     <li><a href="#tab2" data-toggle="tab">Pastries</a></li>
+                     <li><a href="#tab3" data-toggle="tab">Sweets</a></li>
+                  </ul>
+               </div>
+               <div class="col-md-12 no-padding">
+                  <div class="tab-content">
+                     <!-- TAB 1: CAKES -->
+                     <div class="tab-pane active in fade" id="tab1">
+                        <div class="row">
+                           <h3>Cakes & Pies</h3>
+                           <div class="col-md-6">
+                              <div class="polaroid">
+                                 <p>Our delicious fresh cakes</p>
+                                 <img src="~/lib-candy/pieceofcake_html/img/menu1.jpg" alt="" class="img-responsive center-block" />
+                              </div>
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = 0; i < Math.Ceiling(cakes.Count / 2.0); i++)
+                                    {
+                                        var item = cakes[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = (int)Math.Ceiling(cakes.Count / 2.0); i < cakes.Count; i++)
+                                    {
+                                        var item = cakes[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <!-- TAB 2: PASTRIES -->
+                     <div class="tab-pane fade" id="tab2">
+                        <div class="row">
+                           <h3>Pastries</h3>
+                           <div class="col-md-6">
+                              <div class="polaroid">
+                                 <p>Fresh baked daily pastries</p>
+                                 <img src="~/lib-candy/pieceofcake_html/img/menu2.jpg" alt="" class="img-responsive center-block" />
+                              </div>
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = 0; i < Math.Ceiling(pastries.Count / 2.0); i++)
+                                    {
+                                        var item = pastries[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = (int)Math.Ceiling(pastries.Count / 2.0); i < pastries.Count; i++)
+                                    {
+                                        var item = pastries[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
+                     <!-- TAB 3: SWEETS -->
+                     <div class="tab-pane fade" id="tab3">
+                        <div class="row">
+                           <h3>Sweets & Cookies</h3>
+                           <div class="col-md-6">
+                              <div class="polaroid">
+                                 <p>Special artisanal treats</p>
+                                 <img src="~/lib-candy/pieceofcake_html/img/menu3.jpg" alt="" class="img-responsive center-block" />
+                              </div>
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = 0; i < Math.Ceiling(sweets.Count / 2.0); i++)
+                                    {
+                                        var item = sweets[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="col-md-6">
+                              <div class="menu-body">
+                                 <div class="menu-section">
+                                    @for (int i = (int)Math.Ceiling(sweets.Count / 2.0); i < sweets.Count; i++)
+                                    {
+                                        var item = sweets[i];
+                                        <div class="menu-item">
+                                           <div class="menu-item-name">@item.Name</div>
+                                           <div class="menu-item-price">$@item.Price.ToString("0.00")</div>
+                                           <div class="menu-item-description">@item.Description</div>
+                                        </div>
+                                    }
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Callout -->
+      <section id="callout" class="feature color-section">
+         <div class="image-container col-lg-6 pull-left" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/callout.jpg")'); background-size: cover; background-position: center; min-height: 350px;">
+         </div>
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-5 col-lg-offset-7 col-md-12 text-center">
+                  <h3>100 cakes to Choose from</h3>
+                  <p>From customized wedding creations to sweet birthday party treats, we offer a massive selection of cake flavors, custom fillings, and toppings to suit your taste.</p>
+                  <div class="page-scroll">
+                     <a class="btn" href="#contact">
+                        <div class="btn-line"></div>
+                        <div class="btn-line btn-line-shift"></div>
+                        Send us a message
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Gallery -->
+      <section id="gallery" class="color-section2">
+         <div class="container-fluid">
+            <div class="section-heading">
+               <h2>Our Gallery</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="text-center col-md-12">
+               <ul class="nav nav-pills cat text-center" role="tablist" id="gallerytab">
+                  <li class="active"><a href="#" data-toggle="tab" data-filter="*">All</a>
+                  <li><a href="#" data-toggle="tab" data-filter=".cakes">Cakes & Pies</a></li>
+                  <li><a href="#" data-toggle="tab" data-filter=".sweets">Other Sweets</a></li>
+               </ul>
+            </div>
+            <div class="row">
+               <div class="col-md-12 wow fadeInUp">
+                  <div id="lightbox">
+                     <!-- Image 1 -->
+                     <div class="sweets col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery1.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery1.jpg" data-gal="prettyPhoto[gallery]" title="Tasty treats from our bakery.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Image 2 -->
+                     <div class="sweets col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery2.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery2.jpg" data-gal="prettyPhoto[gallery]" title="Decorated cookies.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Image 3 -->
+                     <div class="cakes col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery3.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery3.jpg" data-gal="prettyPhoto[gallery]" title="Rich chocolate layers.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Image 4 -->
+                     <div class="sweets col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery4.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery4.jpg" data-gal="prettyPhoto[gallery]" title="French macarons.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Image 5 -->
+                     <div class="sweets col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery5.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery5.jpg" data-gal="prettyPhoto[gallery]" title="Assorted sweets.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Image 6 -->
+                     <div class="cakes col-lg-4 col-sm-6 col-md-6">
+                        <div class="isotope-item">
+                           <div class="gallery-thumb">
+                              <img class="img-responsive" src="~/lib-candy/pieceofcake_html/img/gallery6.jpg" alt="">
+                              <a href="~/lib-candy/pieceofcake_html/img/gallery6.jpg" data-gal="prettyPhoto[gallery]" title="Fruity cheesecake.">
+                              <span class="overlay-mask"></span>
+                              </a>							  							  
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+      <!-- Section Prices -->	
+      <section id="prices">
+         <div class="container">		
+            <div class="section-heading">
+               <h2>Our Prices</h2>
+               <div class="hr"></div>
+            </div>
+            <div class="row">
+               <!-- Price Table 1 -->
+               <div class='package col-md-4 col-sm-12'>
+                  <div class='package-name'>
+                     <h5>Basic Event</h5>
+                  </div>
+                  <div class='package-price'>$100</div>
+                  <ul>
+                     <li><strong>20</strong> Pastries</li>
+                     <li><strong>2</strong> cakes</li>
+                     <li><strong>30</strong> Cupcakes</li>
+                     <li>Perfect for Small Events</li>
+                     <li>Serves up to 20 people</li>
+                  </ul>
+                  <div class="page-scroll">
+                     <a class="btn" href="#contact">
+                        <div class="btn-line"></div>
+                        <div class="btn-line btn-line-shift"></div>
+                        Contact
+                     </a>
+                  </div>
+               </div>
+               <!-- Price Table 2 -->
+               <div class='package featured-package col-md-4 col-sm-12 res-margin'>
+                  <div class='package-name'>
+                     <h5>Medium Event</h5>
+                  </div>
+                  <div class='package-price'>$250</div>
+                  <ul>
+                     <li><strong>50</strong> Pastries</li>
+                     <li><strong>6</strong> cakes</li>
+                     <li><strong>70</strong> Cupcakes</li>
+                     <li>Perfect for Medium Events</li>
+                     <li>Serves up to 50 people</li>
+                  </ul>
+                  <div class="page-scroll">
+                     <a class="btn" href="#contact">
+                        <div class="btn-line"></div>
+                        <div class="btn-line btn-line-shift"></div>
+                        Contact
+                     </a>
+                  </div>
+               </div>
+               <!-- Price Table 3 -->
+               <div class='package col-md-4 col-sm-12 res-margin'>
+                  <div class='package-name'>
+                     <h5>Mega Event</h5>
+                  </div>
+                  <div class='package-price'>$550</div>
+                  <ul>
+                     <li><strong>100</strong> Pastries</li>
+                     <li><strong>10</strong> cakes</li>
+                     <li><strong>130</strong> Cupcakes</li>
+                     <li>Perfect for Large Events</li>
+                     <li>Serves up to 100 people</li>
+                  </ul>
+                  <div class="page-scroll">
+                     <a class="btn" href="#contact">
+                        <div class="btn-line"></div>
+                        <div class="btn-line btn-line-shift"></div>
+                        Contact
+                     </a>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+	  
+
+      <!-- Section Contact -->
+      <section id="contact">
+         <div class="container">
+            <div class="col-lg-7 col-md-7">
+               <div class="section-heading">
+                  <h2>Contact Us</h2>
+                  <div class="hr"></div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-lg-7 col-md-7 text-center">
+                  <h4>Get in touch with us</h4>
+                  <p>Have a question or want to place a custom cake order? Get in touch with our team today! Fill out the contact form below or call us directly. We would love to bake something special for you.</p>
+                  <ul class="contact-info">
+                     <li><i class="fa fa-map-marker"></i>İstanbul Bebek 34100</li>
+                     <li><i class="fa fa-phone"></i>0123456789</li>
+                     <li><i class="fa fa-envelope"></i><a href="mailto:email@email.com">email@email.com</a> </li>
+                  </ul>
+                  <div class="form-style" id="contact_form">
+                     <div id="contact_results"></div>
+                     <div class="form-group">
+                        <input type="text" name="name" class="form-control input-field" placeholder="Name" required="">                    
+                        <input type="email" name="email" class="form-control input-field" placeholder="Email" required="">           
+                        <input type="text" name="subject" class="form-control input-field" placeholder="Subject">                                          
+                        <textarea name="message" id="message" class="textarea-field form-control" rows="4" placeholder="Enter your message" required=""></textarea>
+                        <a class="btn" href="#contact" id="submit_btn">
+                           <div class="btn-line"></div>
+                           <div class="btn-line btn-line-shift"></div>
+                           Send Message
+                        </a>
+                     </div>
+                  </div>
+               </div>
+            </div>            
+         </div>
+      </section>

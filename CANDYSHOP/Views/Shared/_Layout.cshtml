@@ -1,50 +1,151 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CANDYSHOP</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CANDYSHOP.styles.css" asp-append-version="true" />
+    <meta charset="utf-8">
+    <!--[if IE]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Piece of Cake - The Premium Confectionery CMS">
+    <meta name="author" content="zaruyashar">
+    <title>@ViewData["Title"] - Piece of Cake</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <!-- Icon fonts -->
+    <link href="~/fonts/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="~/fonts/flaticons/flaticon.css" rel="stylesheet" type="text/css">
+    <link href="~/fonts/glyphicons/bootstrap-glyphicons.css" rel="stylesheet" type="text/css">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah%7COpen+Sans:400,700%7CPaytone+One" rel="stylesheet">
+    <!-- Style CSS -->
+    <link href="~/css/style.css" rel="stylesheet">
+    <!-- Color Style CSS -->
+    <link href="~/styles/sweet.css" rel="stylesheet">
+    <!-- CSS Plugins -->
+    <link rel="stylesheet" href="~/css/plugins.css">
+    <!-- Favicons-->
+    <link rel="apple-touch-icon" sizes="72x72" href="~/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="~/apple-icon-114x114.png">
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon">
 </head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CANDYSHOP</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+<body id="page-top" data-spy="scroll" data-target=".navbar-custom">
+    <!-- Navbar -->
+    <nav class="navbar navbar-custom navbar-fixed-top" id="navbar-custom">
+        <div class="container">
+            <!-- Logo and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-brand">
+                    <i class="fa fa-bars"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+                <!-- Logo -->
+                <div class="navbar-brand page-scroll">
+                    <a href="@Url.Action("Index", "Home")#page-top"><img src="~/lib-candy/pieceofcake_html/img/logo.png" alt=""></a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <!-- /.navbar-header -->
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-brand">
+                <ul class="nav navbar-nav page-scroll navbar-right">
+                    <li><a href="@Url.Action("Index", "Home")#page-top">Home</a></li>
+                    <li><a href="@Url.Action("Index", "Home")#about">About us</a></li>
+                    <li><a href="@Url.Action("Blog", "Home")">Blog</a></li>
+                    <li><a href="@Url.Action("Index", "Home")#menu">Menu</a></li>
+                    <li><a href="@Url.Action("Index", "Home")#gallery">Gallery</a></li>
+                    <li><a href="@Url.Action("Index", "Home")#prices">Prices</a></li>
+                    <li><a href="@Url.Action("Index", "Home")#contact">Contact</a></li>
+                    <li>
+                        <a href="@Url.Action("Index", "Admin")" style="color: #2dbba4 !important; font-weight: bold;">
+                            <i class="fa fa-cogs"></i> Admin
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /container -->
+    </nav>
+    <!-- /nav -->
+    <!-- Preloader -->
+    <div id="loading">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object-load" id="object_one"></div>
+                <div class="object-load" id="object_two"></div>
+                <div class="object-load" id="object_three"></div>
+            </div>
+        </div>
     </div>
+    <!-- /preloader -->
+    @RenderBody()
 
-    <footer class="border-top footer text-muted">
+    <!-- Footer -->
+    <footer class="color-section">
         <div class="container">
-            &copy; 2026 - CANDYSHOP - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <!-- social media and logo -->
+            <div class="row text-center">
+                <a href="@Url.Action("Index", "Home")#page-top"><img src="~/lib-candy/pieceofcake_html/img/logo.png" alt="" class="img-responsive center-block"></a>
+                <!-- social-icons -->
+                <div class="social-media">
+                    <a href="https://x.com/" title=""><i class="fa fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/" title=""><i class="fa fa-facebook"></i></a>
+                    <a href="https://www.linkedin.com/" title=""><i class="fa fa-linkedin"></i></a>
+                    <a href="https://pinterest.com" title=""><i class="fa fa-pinterest"></i></a>
+                    <a href="https://www.instagram.com/" title=""><i class="fa fa-instagram"></i></a>
+                </div>
+            </div>
+            <!-- /row -->
+            <div class="row margin-footer">
+                <!-- about -->
+                <div class="col-lg-4 col-md-4 col-md-offset-2 col-lg-offset-2 text-right">
+                    <h6>About us</h6>
+                    <p>Donut tiramisu caramels pastry Candy canes croissant muffin marshmallow cake.</p>
+                </div>
+                <!-- /col-lg-4 -->
+                <!-- Opening Hours -->
+                <div class="col-lg-4 col-md-4 text-left timetable res-margin">
+                    <h6>Opening Hours:</h6>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="text-left">Monday to Friday</td>
+                                <td class="text-right">7 a.m. to 7 p.m.</td>
+                            </tr>
+                            <tr>
+                                <td class="text-left">Weekends / Holidays</td>
+                                <td class="text-right"><span class="label label-danger">Closed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /col-lg-4 -->
+                <div class="col-md-12 text-center">
+                    <p>Copyright © @DateTime.Now.Year | <a href="https://github.com/zaruyashar" target="_blank" rel="noopener noreferrer">zaruyashar</a></p>
+                    <!-- Go To Top Link -->
+                    <div class="page-scroll hidden-sm hidden-xs">
+                        <a href="@Url.Action("Index", "Home")#page-top" class="back-to-top"><i class="fa fa-angle-up"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Core JavaScript Files -->
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <!--Other Plugins -->
+    <script src="~/js/plugins.js"></script>
+    <!-- Open Street map -->
+    <script src="~/js/map.js"></script>
+    <!--Mail Chimp validator -->
+    <script src="~/js/mc-validate.js"></script>
+    <!-- Prefix free CSS -->
+    <script src="~/js/prefixfree.js"></script>
+    <!-- Slider -->
+    <script src="~/js/slider.js"></script>
+    <!-- Main Js -->
+    <script src="~/js/main.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

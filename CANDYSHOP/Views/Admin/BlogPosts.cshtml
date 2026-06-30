@@ -1,0 +1,147 @@
+@model List<CANDYSHOP.Models.BlogPost>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Blog Posts";
+}
+
+<div class="page-head">
+  <div class="crumbs">
+    <i class="fa-solid fa-house" style="color:var(--pink)"></i>
+    <span>Home</span>
+    <span class="sep">/</span>
+    <span class="here">Blog Posts</span>
+  </div>
+  <a href="@Url.Action("BlogPostCreate", "Admin")" class="btn-add">
+    <i class="fa-solid fa-plus"></i> Add New
+  </a>
+</div>
+
+<div class="card">
+  <div class="card-head">
+    <i class="fa-solid fa-blog"></i> All Blog Posts
+  </div>
+  <div class="card-body">
+    <div class="table-tools">
+      <div class="len">
+        <label>
+          Show
+          <select id="pageLen">
+            <option selected>10</option>
+            <option>25</option>
+            <option>50</option>
+          </select>
+          entries
+        </label>
+      </div>
+      <div class="search">
+        <form method="get" action="@Url.Action("BlogPosts", "Admin")" style="display: flex; gap: 5px;">
+            <input type="search" name="q" id="searchInput" placeholder="Search blog posts..." value="@ViewBag.SearchQuery">
+            <button type="submit" class="btn-save" style="padding: 5px 15px; font-size: 13px; border-radius: 4px;">Search</button>
+            @if (!string.IsNullOrEmpty(ViewBag.SearchQuery))
+            {
+                <a href="@Url.Action("BlogPosts", "Admin")" class="btn-ghost" style="padding: 5px 10px; text-decoration: none; border-radius: 4px; display: flex; align-items: center;">Clear</a>
+            }
+        </form>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data" id="blogTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Summary</th>
+            <th>Created Date</th>
+            <th>Comments</th>
+            <th style="text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (Model == null || !Model.Any())
+          {
+              <tr>
+                  <td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">No blog posts found.</td>
+              </tr>
+          }
+          else
+          {
+              @foreach (var item in Model)
+              {
+                  <tr>
+                    <td>@item.Id</td>
+                    <td><strong>@item.Title</strong></td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">@item.Summary</td>
+                    <td>@item.CreatedDate.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@item.CommentCount</td>
+                    <td style="text-align:right">
+                      <div class="row-actions">
+                        <a href="@Url.Action("BlogPostEdit", "Admin", new { id = item.Id })" class="btn-icon btn-edit" title="Edit">
+                          <i class="fa-solid fa-pen"></i>
+                        </a>
+                        <button class="btn-icon btn-delete" data-id="@item.Id" data-title="@item.Title" title="Delete">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+              }
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-foot">
+      <div id="info">Showing @(Model?.Count ?? 0) entries</div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+<script>
+  // SweetAlert delete
+  document.querySelectorAll(".btn-delete").forEach(button => {
+      button.addEventListener("click", () => {
+          const id = button.dataset.id;
+          const title = button.dataset.title;
+          
+          Swal.fire({
+              title: `Delete blog post "${title}"?`,
+              text: "This action cannot be undone.",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#D0324B",
+              cancelButtonColor: "#3d2230",
+              confirmButtonText: "Yes, delete it!",
+              background: "#FDF5E7"
+          }).then(res => {
+              if (res.isConfirmed) {
+                  fetch(`@Url.Action("BlogPostDelete", "Admin")/${id}`, {
+                      method: "POST"
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          Swal.fire({
+                              title: "Deleted!",
+                              icon: "success",
+                              background: "#FDF5E7",
+                              confirmButtonColor: "#2dbba4"
+                          }).then(() => {
+                              location.reload();
+                          });
+                      } else {
+                          Swal.fire({
+                              title: "Error!",
+                              text: data.message || "Failed to delete blog post.",
+                              icon: "error",
+                              background: "#FDF5E7"
+                          });
+                      }
+                  });
+              }
+          });
+      });
+  });
+</script>
+}

@@ -1,0 +1,83 @@
+@model CANDYSHOP.Models.BlogPost
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@functions {
+    string ResolveImageUrl(string? path, string defaultPath = "img/logo.png")
+    {
+        if (string.IsNullOrWhiteSpace(path))
+            return Url.Content("~/lib-candy/pieceofcake_html/" + defaultPath);
+        
+        var cleanPath = path.Trim().Replace("\\", "/").TrimStart('/');
+        
+        if (cleanPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || 
+            cleanPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            return cleanPath;
+        }
+
+        if (cleanPath.StartsWith("img/", StringComparison.OrdinalIgnoreCase))
+        {
+            cleanPath = "lib-candy/pieceofcake_html/" + cleanPath;
+        }
+        
+        return Url.Content("~/" + cleanPath);
+    }
+}
+
+<!-- Section Blog -->
+<section id="blog-main">
+   <div class="jumbotron" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/bannerblog.jpg")'); background-size: cover; min-height: 250px;"></div>
+   <div class="page-title" data-0="background-position:98% 40px,2% 40px;" data-end="background-position:98% -1200px,2% -1200px" style="background-image: url('@Url.Content("~/lib-candy/pieceofcake_html/img/bake_pattern.png")'); background-repeat: repeat;">
+      <!-- breadcrumb --> 
+      <ul class="breadcrumb">
+         <li><a href="@Url.Action("Index", "Home")">Home</a> <span class="divider"></span></li>
+         <li><a href="@Url.Action("Blog", "Home")">Blog Home</a> <span class="divider"></span></li>
+         <li class="active">@Model.Title</li>
+      </ul>
+      <!-- /breadcrumb --> 
+   </div>
+   <div class="container">
+      <div class="row">
+         <!-- Blog Post (Centered Layout) -->
+         <div class="col-md-8 col-md-offset-2 blog-home">
+            <!-- Content Row -->
+            <div class="row">
+               <div class="blog-post post-main">
+                  <h2>@Model.Title</h2>
+                  <!-- Post Info -->
+                  <div class="post-info">
+                     <p><i class="fa fa-clock-o"></i>Posted on @Model.CreatedDate.ToString("MMMM dd, yyyy 'at' h:mm tt")</p>
+                     <p><i class="fa fa-user"></i>by <a href="#">Mary Jane</a></p>
+                  </div>
+                  <!-- Image -->
+                  <img class="img-responsive img-rounded" src="@ResolveImageUrl(Model.ImagePath, "img/blog1.jpg")" alt="@Model.Title" style="width: 100%; max-height: 450px; object-fit: cover;">
+                  <div class="post-info">
+                     <!-- Tags -->
+                     <div class="blog-tags">
+                        <p><i class="fa fa-tags"></i>Tags:</p>
+                        <a href="#">Pastries</a> <a href="#">Cake</a> <a href="#">Fruit Pie</a> 
+                     </div>
+                  </div>
+                  
+                  <!-- Post Content -->
+                  <div class="post-content-body" style="font-size: 16px; line-height: 1.8; margin-top: 20px;">
+                      @if (Model.Content.Contains("\n"))
+                      {
+                          foreach (var paragraph in Model.Content.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries))
+                          {
+                              <p style="margin-bottom: 20px;">@paragraph</p>
+                          }
+                      }
+                      else
+                      {
+                          <p>@Model.Content</p>
+                      }
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
